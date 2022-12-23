@@ -7,26 +7,15 @@ import numpy as np
 def main(filename, classifier='lgbm', full=False, ml='default', params='default', calibration='NoCal', run='default', data='data'):
     print("main method list is {}".format(ml))
     if run == 'default':
-        if full:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='variance', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='variance', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='selectmodel', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE_NOBIN', methodlist=ml, feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml, full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='variance')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='variance')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE_NOBIN', methodlist=ml, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, methodlist=ml, method='ORIG')
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='nofs', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='variance', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='nofs', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='variance', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='selectmodel', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE_NOBIN', methodlist=ml, feat_sel='nofs', full=True)
+        experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml, full=True)
     elif run == 'tab2':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml,
@@ -42,58 +31,19 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='NO_ORIG', methodlist=ml,
                              feat_sel='selectmodel', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml, full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml,
-                             feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ONLY_OD', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ONLY_RED', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG_OD', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG_RED', methodlist=ml,
-                             full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='NO_ORIG', methodlist=ml,
-                             feat_sel='selectmodel')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml)
+            
     elif run=='short':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='variance', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_sel='variance')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration, method='WHOLE', methodlist=ml, feat_sel='selectmodel')
-    elif run == 'tab1':
-        if full:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='selectmodel')
+        
     elif run == 'single':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='WHOLE', methodlist=ml, feat_imp=False, feat_sel='selectmodel')
+        
     elif run == 'single_or':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs')
     elif run=='nf':
         sampling_perc=1
         metas = ['CURE', 'CCR', 'RBO', 'SWIM',
@@ -134,14 +84,9 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
             except:
                 continue
     elif run == 'xgbod':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='XGBOD', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='XGBOD', methodlist=ml, feat_imp=False, feat_sel='nofs')
     elif run == 'tab3_FR':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml,
                              feat_sel='nofs', full=True)
@@ -149,39 +94,18 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
             experiment_FROID(filename, classifier=classifier, data_fold=data, method='XGBOD', methodlist=ml, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold='data_light', method='WHOLE', methodlist='light',
                              feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='ORIG', methodlist=ml,
-                             feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist=ml, feat_sel='selectmodel', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='OD-BINOD-RED', methodlist=ml, feat_sel='selectmodel', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='XGBOD', methodlist=ml, feat_sel='nofs', full=True)
-            experiment_FROID(filename, classifier=classifier, data_fold=data, method='WHOLE', methodlist='light',
-                             feat_sel='selectmodel', full=True)
     elif run == 'tab1_alt':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='OD-BINOD-RED', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='OD-BINOD-RED', methodlist=ml, feat_imp=False, feat_sel='selectmodel')
     elif run == 'tab3_alt':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='OD-BINOD-RED-clean', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
-        else:
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs')
-            experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
-                             method='OD-BINOD-RED-clean', methodlist=ml, feat_imp=False, feat_sel='selectmodel')
 
-    elif run == 'tab1_alt_clean':
-        if full:
+    elif run == 'tab1':
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='ORIG', methodlist=ml, feat_imp=False, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier='dt', data_fold=data, params=params, calibration=calibration,
@@ -194,7 +118,6 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
                              method='OD-BINOD-RED-clean', methodlist=ml, feat_imp=False, feat_sel='selectmodel', full=True)
 
     elif run == 'cal':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold='data_xgbod', params=params, calibration='calib',
                              method='ORIG', methodlist='xgbod', feat_imp=False, feat_sel='nofs', full=True)
             experiment_FROID(filename, classifier=classifier, data_fold='data', params=params, calibration='calib',
@@ -202,7 +125,6 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
             experiment_FROID(filename, classifier=classifier, data_fold='data_xgbod', params=params, calibration='calib',
                              method='WHOLE', methodlist='xgbod', feat_imp=False, feat_sel='selectmodel', full=True)
     elif run == 'fi':
-        if full:
             experiment_FROID(filename, classifier=classifier, data_fold=data, params=params, calibration=calibration,
                              method='WHOLE', methodlist='xgbod', feat_imp=True, feat_sel='selectmodel', full=True)
 
@@ -212,7 +134,6 @@ def main(filename, classifier='lgbm', full=False, ml='default', params='default'
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--full', type=str, default='onlytrain')
     parser.add_argument('--starter', type=int, default=0)
     parser.add_argument('--finisher', type=int, default=100)
     parser.add_argument('--ml', type=str, default='default')
@@ -238,15 +159,6 @@ if __name__=='__main__':
     params = args.params
     run = args.run
     cal = args.cal
-
-    filelist = ['stars', 'oil']
     for f in tqdm(filelist_):
         print(f)
-        if args.full == 'full':
-            main(f, full=True, ml=ml, classifier=clf_string, params=params, run=run, data=args.data, calibration=cal)
-        elif args.full == 'both':
-            main(f, ml=ml, classifier=clf_string, params=params, run=run, data=args.data, calibration=cal)
-            print(ml)
-            main(f, ml=ml, full=True, classifier=clf_string, params=params, run=run, data=args.data, calibration=cal)
-        else:
-            main(f, ml=ml, classifier=clf_string, params=params, run=run, data=args.data, calibration=cal)
+        main(f, full=True, ml=ml, classifier=clf_string, params=params, run=run, data=args.data, calibration=cal)
