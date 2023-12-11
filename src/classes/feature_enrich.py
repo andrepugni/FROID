@@ -17,7 +17,8 @@ from pyod.models.copod import COPOD
 from pyod.models.ecod import ECOD
 from pyod.models.sos import SOS
 from pyod.models.pca import PCA as PCAM
-#from pyod.models.auto_encoder_torch import AutoEncoder
+
+# from pyod.models.auto_encoder_torch import AutoEncoder
 from sklearn.decomposition import PCA
 from sklearn import random_projection
 from sklearn.manifold import Isomap
@@ -72,7 +73,7 @@ def dim_reduction_class(X, y, string_method):
             "kernel": "sigmoid",
             "gamma": 15,
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = KernelPCA(**params_dict)
     elif string_method == "KPCA_POLY":
@@ -81,7 +82,7 @@ def dim_reduction_class(X, y, string_method):
             "kernel": "poly",
             "gamma": 15,
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = KernelPCA(**params_dict)
     elif string_method == "LLE":
@@ -91,7 +92,7 @@ def dim_reduction_class(X, y, string_method):
             "eigen_solver": "auto",
             "method": "standard",
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = manifold.LocallyLinearEmbedding(**params_dict)
     elif string_method == "LLE_HESS":
@@ -101,7 +102,7 @@ def dim_reduction_class(X, y, string_method):
             "eigen_solver": "dense",
             "method": "hessian",
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = manifold.LocallyLinearEmbedding(**params_dict)
     elif string_method == "LLE_MOD":
@@ -111,7 +112,7 @@ def dim_reduction_class(X, y, string_method):
             "eigen_solver": "dense",
             "method": "modified",
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = manifold.LocallyLinearEmbedding(**params_dict)
     elif string_method == "MDS":
@@ -120,11 +121,16 @@ def dim_reduction_class(X, y, string_method):
             "n_components": 2,
             "n_init": 1,
             "random_state": 42,
-            "n_jobs": 2
+            "n_jobs": 2,
         }
         m = manifold.MDS(**params_dict)
     elif string_method == "SE":
-        params_dict = {"n_neighbors": 50, "n_components": 2, "random_state": 42, "n_jobs": 2}
+        params_dict = {
+            "n_neighbors": 50,
+            "n_components": 2,
+            "random_state": 42,
+            "n_jobs": 2,
+        }
         m = manifold.SpectralEmbedding(**params_dict)
     try:
         if string_method == "LDA":
@@ -194,11 +200,7 @@ def outlier_detection_class(
             params_dbscan = {"eps": 0.3, "min_samples": 20, "n_jobs": 2}
             params_loop = {"extent": 2, "n_neighbors": 10}
         db = DBSCAN(**params_dbscan)
-        m = loop.LocalOutlierProbability(
-            X,
-            progress_bar=False,
-            **params_loop
-        )
+        m = loop.LocalOutlierProbability(X, progress_bar=False, **params_loop)
         return db, m
 
     else:
