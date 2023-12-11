@@ -76,7 +76,10 @@ class CCR:
 
                 radius_change = remaining_energy / (current_majority + 1.0)
 
-                if distances[i, sorted_distances[current_majority]] >= r + radius_change:
+                if (
+                    distances[i, sorted_distances[current_majority]]
+                    >= r + radius_change
+                ):
                     r += radius_change
 
                     break
@@ -84,9 +87,13 @@ class CCR:
                     if current_majority == 0:
                         last_distance = 0.0
                     else:
-                        last_distance = distances[i, sorted_distances[current_majority - 1]]
+                        last_distance = distances[
+                            i, sorted_distances[current_majority - 1]
+                        ]
 
-                    radius_change = distances[i, sorted_distances[current_majority]] - last_distance
+                    radius_change = (
+                        distances[i, sorted_distances[current_majority]] - last_distance
+                    )
                     r += radius_change
                     remaining_energy -= radius_change * (current_majority + 1.0)
                     current_majority += 1
@@ -98,8 +105,9 @@ class CCR:
                 d = distances[i, sorted_distances[j]]
 
                 if d < 1e-20:
-                    majority_point += (1e-6 * np.random.rand(len(majority_point)) + 1e-6) * \
-                                      np.random.choice([-1.0, 1.0], len(majority_point))
+                    majority_point += (
+                        1e-6 * np.random.rand(len(majority_point)) + 1e-6
+                    ) * np.random.choice([-1.0, 1.0], len(majority_point))
                     d = distance(minority_point, majority_point)
 
                 translation = (r - d) / d * (majority_point - minority_point)
@@ -111,19 +119,32 @@ class CCR:
 
         for i in range(len(minority)):
             minority_point = minority[i]
-            synthetic_samples = int(np.round(1.0 / (radii[i] * np.sum(1.0 / radii)) * n))
+            synthetic_samples = int(
+                np.round(1.0 / (radii[i] * np.sum(1.0 / radii)) * n)
+            )
             r = radii[i]
 
             for _ in range(synthetic_samples):
                 appended.append(minority_point + taxicab_sample(len(minority_point), r))
 
-        return np.concatenate([majority, minority, appended]), \
-               np.concatenate([np.tile([majority_class], len(majority)),
-                               np.tile([minority_class], len(minority) + len(appended))])
+        return np.concatenate([majority, minority, appended]), np.concatenate(
+            [
+                np.tile([majority_class], len(majority)),
+                np.tile([minority_class], len(minority) + len(appended)),
+            ]
+        )
 
 
 class CCRSelection:
-    def __init__(self, classifier, measure, n_splits=5, energies=(0.25,), scaling_factors=(0.0,), n=None):
+    def __init__(
+        self,
+        classifier,
+        measure,
+        n_splits=5,
+        energies=(0.25,),
+        scaling_factors=(0.0,),
+        n=None,
+    ):
         self.classifier = classifier
         self.measure = measure
         self.n_splits = n_splits
@@ -144,8 +165,9 @@ class CCRSelection:
                 scores = []
 
                 for train_idx, test_idx in self.skf.split(X, y):
-                    X_train, y_train = CCR(energy=energy, scaling=scaling, n=self.n).\
-                        fit_resample(X[train_idx], y[train_idx])
+                    X_train, y_train = CCR(
+                        energy=energy, scaling=scaling, n=self.n
+                    ).fit_resample(X[train_idx], y[train_idx])
 
                     classifier = self.classifier.fit(X_train, y_train)
                     predictions = classifier.predict(X[test_idx])
@@ -159,10 +181,13 @@ class CCRSelection:
 
                     best_score = score
 
-        return CCR(energy=self.selected_energy, scaling=self.selected_scaling, n=self.n).fit_resample(X, y)
+        return CCR(
+            energy=self.selected_energy, scaling=self.selected_scaling, n=self.n
+        ).fit_resample(X, y)
+
 
 def _rbf(d, eps):
-    return np.exp(-(d * eps) ** 2)
+    return np.exp(-((d * eps) ** 2))
 
 
 def _distance(x, y):
@@ -200,9 +225,18 @@ def _score(point, X, y, minority_class, epsilon):
 
 
 class RBO:
-    def __init__(self, gamma=0.05, n_steps=500, step_size=0.001, stop_probability=0.02, criterion='balance',
-                 minority_class=None, n=None, sampling_strategy=None):
-        assert criterion in ['balance', 'minimize', 'maximize']
+    def __init__(
+        self,
+        gamma=0.05,
+        n_steps=500,
+        step_size=0.001,
+        stop_probability=0.02,
+        criterion="balance",
+        minority_class=None,
+        n=None,
+        sampling_strategy=None,
+    ):
+        assert criterion in ["balance", "minimize", "maximize"]
         assert 0.0 <= stop_probability <= 1.0
 
         self.gamma = gamma
@@ -241,7 +275,9 @@ class RBO:
 
         for i in range(len(minority_points)):
             minority_point = minority_points[i]
-            minority_scores.append(_score(minority_point, X, y, minority_class, epsilon))
+            minority_scores.append(
+                _score(minority_point, X, y, minority_class, epsilon)
+            )
 
         appended = []
 
@@ -251,29 +287,52 @@ class RBO:
             score = minority_scores[idx]
 
             for i in range(self.n_steps):
-                if self.stop_probability is not None and self.stop_probability > np.random.rand():
+                if (
+                    self.stop_probability is not None
+                    and self.stop_probability > np.random.rand()
+                ):
                     break
 
                 translation = np.zeros(len(point))
                 sign = np.random.choice([-1, 1])
                 translation[np.random.choice(range(len(point)))] = sign * self.step_size
                 translated_point = point + translation
-                translated_score = _score(translated_point, X, y, minority_class, epsilon)
+                translated_score = _score(
+                    translated_point, X, y, minority_class, epsilon
+                )
 
-                if (self.criterion == 'balance' and np.abs(translated_score) < np.abs(score)) or \
-                        (self.criterion == 'minimize' and translated_score < score) or \
-                        (self.criterion == 'maximize' and translated_score > score):
+                if (
+                    (
+                        self.criterion == "balance"
+                        and np.abs(translated_score) < np.abs(score)
+                    )
+                    or (self.criterion == "minimize" and translated_score < score)
+                    or (self.criterion == "maximize" and translated_score > score)
+                ):
                     point = translated_point
                     score = translated_score
 
             appended.append(point)
 
-        return np.concatenate([X, appended]), np.concatenate([y, minority_class * np.ones(len(appended))])
+        return np.concatenate([X, appended]), np.concatenate(
+            [y, minority_class * np.ones(len(appended))]
+        )
 
 
 class RBOSelection:
-    def __init__(self, classifier, measure, n_splits=5, gammas=(0.05,), n_steps=500, step_size=0.001,
-                 stop_probability=0.02, criterion='balance', minority_class=None, n=None):
+    def __init__(
+        self,
+        classifier,
+        measure,
+        n_splits=5,
+        gammas=(0.05,),
+        n_steps=500,
+        step_size=0.001,
+        stop_probability=0.02,
+        criterion="balance",
+        minority_class=None,
+        n=None,
+    ):
         self.classifier = classifier
         self.measure = measure
         self.n_splits = n_splits
@@ -296,10 +355,15 @@ class RBOSelection:
             scores = []
 
             for train_idx, test_idx in self.skf.split(X, y):
-                X_train, y_train = RBO(gamma=gamma, n_steps=self.n_steps, step_size=self.step_size,
-                                       stop_probability=self.stop_probability, criterion=self.criterion,
-                                       minority_class=self.minority_class, n=self.n).\
-                    fit_resample(X[train_idx], y[train_idx])
+                X_train, y_train = RBO(
+                    gamma=gamma,
+                    n_steps=self.n_steps,
+                    step_size=self.step_size,
+                    stop_probability=self.stop_probability,
+                    criterion=self.criterion,
+                    minority_class=self.minority_class,
+                    n=self.n,
+                ).fit_resample(X[train_idx], y[train_idx])
 
                 classifier = self.classifier.fit(X_train, y_train)
                 predictions = classifier.predict(X[test_idx])
@@ -312,15 +376,19 @@ class RBOSelection:
 
                 best_score = score
 
-        return RBO(gamma=self.selected_gamma, n_steps=self.n_steps, step_size=self.step_size,
-                   stop_probability=self.stop_probability, criterion=self.criterion,
-                   minority_class=self.minority_class, n=self.n).fit_resample(X, y)
-
-
+        return RBO(
+            gamma=self.selected_gamma,
+            n_steps=self.n_steps,
+            step_size=self.step_size,
+            stop_probability=self.stop_probability,
+            criterion=self.criterion,
+            minority_class=self.minority_class,
+            n=self.n,
+        ).fit_resample(X, y)
 
 
 def rbf(d, eps):
-    return np.exp(-(d * eps) ** 2)
+    return np.exp(-((d * eps) ** 2))
 
 
 def pairwise_distances(X):
@@ -360,14 +428,18 @@ def scoreAll(points, X, epsilon):
             rbfRes = rbf(distance(point, X[i, :]), epsilon)
             cur_mutual_density_score += rbfRes
 
-        mutual_density_scores = np.append(mutual_density_scores, cur_mutual_density_score)
+        mutual_density_scores = np.append(
+            mutual_density_scores, cur_mutual_density_score
+        )
         cur_mutual_density_score = 0.0
 
     return mutual_density_scores
 
 
 class SwimRBF:
-    def __init__(self, minCls=None, epsilon=None, steps=5, tau=0.25, sampling_strategy=None):
+    def __init__(
+        self, minCls=None, epsilon=None, steps=5, tau=0.25, sampling_strategy=None
+    ):
         self.epsilon = epsilon
         self.steps = steps
         self.tau = tau
@@ -400,7 +472,7 @@ class SwimRBF:
         synthData = np.empty([0, data.shape[1]])
         stds = self.tau * np.std(trnMinData, axis=0)
 
-        if (np.sum(labels == self.minCls) == 1):
+        if np.sum(labels == self.minCls) == 1:
             trnMinData = trnMinData.reshape(1, len(trnMinData))
 
         while synthData.shape[0] < numSamples:
@@ -410,7 +482,9 @@ class SwimRBF:
                 step = trnMinData[j, :] + np.random.normal(0, stds, trnMinData.shape[1])
                 stepScore = score(step, trnMajData, self.epsilon)
                 if stepScore <= scoreCur:
-                    synthData = np.append(synthData, step.T.reshape((1, len(step))), axis=0)
+                    synthData = np.append(
+                        synthData, step.T.reshape((1, len(step))), axis=0
+                    )
                     break
 
         sampled_data = np.concatenate([np.array(synthData), data])
